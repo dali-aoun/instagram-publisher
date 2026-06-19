@@ -1,7 +1,14 @@
 {
   "image_idx": 0,
-  "reel_idx": 0,
+  "reel_idx": 1,
   "img_kw": 0,
-  "reel_kw": 0,
-  "published": []
+  "reel_kw": 1,
+  "published": [
+    {
+      "slot": "2026-06-19_10h",
+      "type": "reel",
+      "media_id": "18089652173375684",
+      "at": "2026-06-19T09:26:53.101920+00:00"
+    }
+  ]
 }
