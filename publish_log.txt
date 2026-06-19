@@ -8,3 +8,4 @@
 [2026-06-19 09:27 UTC]   Container pret (40s)
 [2026-06-19 09:27 UTC] OK reel publie: 18089652173375684
 [2026-06-19 09:27 UTC] === Termine 2026-06-19_10h -> 18089652173375684 ===
+[2026-06-19 10:23 UTC] Pas de slot pour UTC 10h - skip
