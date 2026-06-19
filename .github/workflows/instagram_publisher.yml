@@ -1,0 +1,49 @@
+name: Instagram Publisher
+
+on:
+  schedule:
+    # 5 slots par jour (Tunisia UTC+1)
+    # 07h Tunisia = 06h UTC
+    - cron: '0 6 * * *'
+    # 10h Tunisia = 09h UTC
+    - cron: '0 9 * * *'
+    # 13h Tunisia = 12h UTC
+    - cron: '0 12 * * *'
+    # 16h Tunisia = 15h UTC
+    - cron: '0 15 * * *'
+    # 19h Tunisia = 18h UTC
+    - cron: '0 18 * * *'
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Python setup
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install deps
+        run: pip install requests
+
+      - name: Publish
+        env:
+          INSTAGRAM_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
+          LONG_LIVED_TOKEN: ${{ secrets.LONG_LIVED_TOKEN }}
+          PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+        run: python publisher.py
+
+      - name: Commit state
+        run: |
+          git config user.name "instagram-bot"
+          git config user.email "bot@noreply.github.com"
+          git add published_state.json publish_log.txt
+          git diff --cached --quiet || git commit -m "publish: $(date -u +%Y-%m-%d_%Hh)"
+          git push
