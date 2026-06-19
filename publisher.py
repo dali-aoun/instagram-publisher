@@ -22,6 +22,16 @@ TZ_TUNIS = timezone(timedelta(hours=1))
 # UTC hour -> slot type  (Tunisia = UTC+1)
 SCHEDULE = {6: "image", 9: "reel", 12: "image", 15: "reel", 18: "image"}
 
+def detect_slot(now_utc):
+    """Trouve le slot planifié le plus proche (tolérance ±90 min pour décalages GitHub)."""
+    now_min = now_utc.hour * 60 + now_utc.minute
+    best_type, best_hour, best_diff = None, None, 999
+    for sched_hour, slot_type in SCHEDULE.items():
+        diff = abs(now_min - sched_hour * 60)
+        if diff <= 90 and diff < best_diff:
+            best_type, best_hour, best_diff = slot_type, sched_hour, diff
+    return best_type, best_hour
+
 IMAGE_KEYWORDS = [
     "smoothie healthy woman portrait",
     "weight loss women fitness",
@@ -326,14 +336,22 @@ def main():
 
     now_utc   = datetime.now(timezone.utc)
     now_tunis = now_utc.astimezone(TZ_TUNIS)
-    utc_hour  = now_utc.hour
 
-    slot_type = SCHEDULE.get(utc_hour)
+    slot_type, sched_utc_hour = detect_slot(now_utc)
     if not slot_type:
-        log(f"Pas de slot pour UTC {utc_hour}h - skip")
+        log(f"Pas de slot pour UTC {now_utc.hour}h{now_utc.minute:02d} - skip")
         sys.exit(0)
 
-    slot_key = f"{now_tunis.strftime('%Y-%m-%d')}_{now_tunis.hour:02d}h"
+    # Slot key basé sur l'heure planifiée (pas l'heure réelle) pour cohérence
+    tunis_hour = sched_utc_hour + 1  # Tunisia = UTC+1
+    slot_date  = now_tunis.strftime("%Y-%m-%d")
+    # Si tunis_hour déborde minuit, ajuster la date
+    if tunis_hour >= 24:
+        tunis_hour -= 24
+        from datetime import date, timedelta
+        slot_date = (now_tunis.date() + timedelta(days=1)).isoformat()
+    slot_key = f"{slot_date}_{tunis_hour:02d}h"
+    log(f"UTC {now_utc.hour}h{now_utc.minute:02d} → slot {slot_key} (décalage {abs(now_utc.hour*60+now_utc.minute - sched_utc_hour*60)}min)")
     log(f"=== Instagram Publisher {slot_key} type={slot_type} ===")
 
     state    = load_state()
