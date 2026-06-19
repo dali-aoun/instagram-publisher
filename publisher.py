@@ -2,15 +2,15 @@
 publisher.py — Instagram auto-publisher (GitHub Actions)
 3 images + 2 reels par jour, espaces 3h
 Tunisia UTC+1 : 07h(img) 10h(reel) 13h(img) 16h(reel) 19h(img)
+Reels: Pexels video + background music via ffmpeg -> catbox.moe
 """
 
-import os, sys, json, time, random, requests, traceback
+import os, sys, json, time, random, requests, traceback, subprocess, tempfile
 from datetime import datetime, timezone, timedelta
 
 IG_USER_ID  = os.environ.get("INSTAGRAM_USER_ID", "27645316161821605")
 IG_TOKEN    = os.environ.get("LONG_LIVED_TOKEN", "")
 PEXELS_KEY  = os.environ.get("PEXELS_API_KEY", "")
-FUNNEL_URL  = "https://smoothie.thehappy-healthy-life.com"
 BASE_URL    = "https://graph.instagram.com/v21.0"
 BASE_DIR    = os.path.dirname(os.path.abspath(__file__))
 STATE_FILE  = os.path.join(BASE_DIR, "published_state.json")
@@ -46,6 +46,20 @@ REEL_KEYWORDS = [
     "healthy drink preparation",
 ]
 
+# Royalty-free background music (CC-BY bensound.com + freepd.com)
+MUSIC_URLS = [
+    "https://www.bensound.com/bensound-music/bensound-ukulele.mp3",
+    "https://www.bensound.com/bensound-music/bensound-sunny.mp3",
+    "https://www.bensound.com/bensound-music/bensound-acoustic.mp3",
+    "https://www.bensound.com/bensound-music/bensound-instafood.mp3",
+    "https://www.bensound.com/bensound-music/bensound-creativeminds.mp3",
+    "https://www.bensound.com/bensound-music/bensound-betterdays.mp3",
+    "https://www.bensound.com/bensound-music/bensound-energy.mp3",
+    "https://www.bensound.com/bensound-music/bensound-evolution.mp3",
+    "https://freepd.com/music/Smooth%20Lovin.mp3",
+    "https://freepd.com/music/Namaste.mp3",
+]
+
 
 def log(msg):
     ts = datetime.utcnow().strftime("%Y-%m-%d %H:%M UTC")
@@ -59,7 +73,8 @@ def log(msg):
 
 
 def load_state():
-    defaults = {"image_idx": 0, "reel_idx": 0, "img_kw": 0, "reel_kw": 0, "published": []}
+    defaults = {"image_idx": 0, "reel_idx": 0, "img_kw": 0, "reel_kw": 0,
+                "music_idx": 0, "published": []}
     if not os.path.exists(STATE_FILE):
         return defaults
     try:
@@ -82,6 +97,71 @@ def load_captions():
         return json.load(f)
 
 
+def download_file(url, dest_path, label="file"):
+    """Download any file with progress log."""
+    headers = {"User-Agent": "Mozilla/5.0"}
+    r = requests.get(url, headers=headers, stream=True, timeout=120)
+    if r.status_code != 200:
+        log(f"  Download {label} HTTP {r.status_code}: {url[:70]}")
+        return False
+    with open(dest_path, "wb") as f:
+        for chunk in r.iter_content(chunk_size=65536):
+            f.write(chunk)
+    size_kb = os.path.getsize(dest_path) // 1024
+    log(f"  Downloaded {label}: {size_kb}KB")
+    return True
+
+
+def merge_video_audio(video_path, audio_path, output_path):
+    """ffmpeg: loop audio to cover full video, volume at -18dB background level."""
+    cmd = [
+        "ffmpeg", "-y",
+        "-stream_loop", "-1",   # loop audio
+        "-i", audio_path,
+        "-i", video_path,
+        "-map", "1:v:0",
+        "-map", "0:a:0",
+        "-c:v", "copy",
+        "-c:a", "aac",
+        "-af", "volume=-18dB",  # background level
+        "-shortest",
+        "-movflags", "+faststart",
+        output_path
+    ]
+    try:
+        result = subprocess.run(cmd, capture_output=True, text=True, timeout=300)
+        if result.returncode == 0:
+            size_mb = os.path.getsize(output_path) / 1024 / 1024
+            log(f"  ffmpeg merge OK: {size_mb:.1f}MB")
+            return True
+        log(f"  ffmpeg erreur: {result.stderr[-300:]}")
+        return False
+    except subprocess.TimeoutExpired:
+        log("  ffmpeg timeout")
+        return False
+
+
+def upload_to_catbox(file_path):
+    """Upload file to catbox.moe (free permanent hosting) -> returns public URL."""
+    log("  Upload vers catbox.moe...")
+    try:
+        with open(file_path, "rb") as f:
+            r = requests.post(
+                "https://catbox.moe/user/api.php",
+                data={"reqtype": "fileupload"},
+                files={"fileToUpload": ("reel.mp4", f, "video/mp4")},
+                timeout=300
+            )
+        if r.status_code == 200 and r.text.strip().startswith("https://"):
+            url = r.text.strip()
+            log(f"  catbox URL: {url}")
+            return url
+        log(f"  catbox erreur: {r.status_code} {r.text[:100]}")
+    except Exception as e:
+        log(f"  catbox exception: {e}")
+    return None
+
+
 def pexels_image(keyword):
     headers = {"Authorization": PEXELS_KEY}
     params  = {"query": keyword, "per_page": 15, "orientation": "portrait"}
@@ -99,7 +179,8 @@ def pexels_image(keyword):
     return None
 
 
-def pexels_video(keyword):
+def pexels_video_url(keyword):
+    """Return direct CDN mp4 URL from Pexels (portrait preferred)."""
     headers = {"Authorization": PEXELS_KEY}
     params  = {"query": keyword, "per_page": 15, "orientation": "portrait", "size": "medium"}
     try:
@@ -112,19 +193,18 @@ def pexels_video(keyword):
         random.shuffle(videos)
         for video in videos[:8]:
             dur = video.get("duration", 0)
-            if not (3 <= dur <= 90):
+            if not (3 <= dur <= 88):
                 continue
             files = video.get("video_files", [])
-            # Prefer portrait HD from pexels CDN
             for quality in ("hd", "sd", ""):
                 for vf in files:
                     link = vf.get("link", "")
-                    if (vf.get("file_type") == "video/mp4" and
-                            "videos.pexels.com" in link and
-                            vf.get("height", 0) >= vf.get("width", 1)):
+                    if (vf.get("file_type") == "video/mp4"
+                            and "videos.pexels.com" in link
+                            and vf.get("height", 0) >= vf.get("width", 1)):
                         if not quality or vf.get("quality") == quality:
                             return link
-            # Fallback: any pexels CDN mp4
+            # fallback: any pexels CDN mp4 in duration range
             for vf in files:
                 link = vf.get("link", "")
                 if vf.get("file_type") == "video/mp4" and "videos.pexels.com" in link:
@@ -134,17 +214,60 @@ def pexels_video(keyword):
     return None
 
 
-def pexels_with_fallback(keyword, keywords_list, fetch_fn):
+def get_with_fallback(keyword, all_keywords, fetch_fn):
     url = fetch_fn(keyword)
     if url:
         return url
-    for kw in keywords_list:
+    for kw in all_keywords:
         if kw == keyword:
             continue
         url = fetch_fn(kw)
         if url:
             return url
     return None
+
+
+def build_reel_url(pexels_video_url_str, music_idx):
+    """Download Pexels video + background music, merge, upload to catbox."""
+    with tempfile.TemporaryDirectory() as tmpdir:
+        video_path  = os.path.join(tmpdir, "video.mp4")
+        audio_path  = os.path.join(tmpdir, "audio.mp3")
+        output_path = os.path.join(tmpdir, "reel.mp4")
+
+        # Download video
+        log("  Download video Pexels...")
+        if not download_file(pexels_video_url_str, video_path, "video"):
+            return None
+
+        # Try music URLs in rotation until one works
+        music_downloaded = False
+        idx = music_idx % len(MUSIC_URLS)
+        for attempt in range(len(MUSIC_URLS)):
+            music_url = MUSIC_URLS[(idx + attempt) % len(MUSIC_URLS)]
+            log(f"  Download musique: {music_url.split('/')[-1]}")
+            if download_file(music_url, audio_path, "music"):
+                music_downloaded = True
+                break
+
+        if not music_downloaded:
+            # Fallback: generate silent audio (better than no upload)
+            log("  Fallback: audio sine wave via ffmpeg")
+            cmd = ["ffmpeg", "-y", "-f", "lavfi",
+                   "-i", "sine=frequency=300:duration=60",
+                   audio_path]
+            subprocess.run(cmd, capture_output=True, timeout=30)
+            music_downloaded = os.path.exists(audio_path)
+
+        if not music_downloaded:
+            log("  ERREUR: impossible d'obtenir une piste audio")
+            return None
+
+        # Merge video + audio
+        if not merge_video_audio(video_path, audio_path, output_path):
+            return None
+
+        # Upload merged video
+        return upload_to_catbox(output_path)
 
 
 def ig_create_image(image_url, caption):
@@ -155,11 +278,11 @@ def ig_create_image(image_url, caption):
 
 def ig_create_reel(video_url, caption):
     data = {
-        "media_type":   "REELS",
-        "video_url":    video_url,
-        "caption":      caption,
+        "media_type":    "REELS",
+        "video_url":     video_url,
+        "caption":       caption,
         "share_to_feed": "true",
-        "access_token": IG_TOKEN,
+        "access_token":  IG_TOKEN,
     }
     r = requests.post(f"{BASE_URL}/{IG_USER_ID}/media", data=data, timeout=60)
     return r.status_code, r.json()
@@ -216,7 +339,6 @@ def main():
     state    = load_state()
     captions = load_captions()
 
-    # Anti-doublon
     if any(p["slot"] == slot_key for p in state["published"]):
         log(f"Deja publie: {slot_key} - skip")
         sys.exit(0)
@@ -231,7 +353,7 @@ def main():
         keyword = IMAGE_KEYWORDS[kw_idx]
 
         log(f"Recherche image Pexels: {keyword}")
-        image_url = pexels_with_fallback(keyword, IMAGE_KEYWORDS, pexels_image)
+        image_url = get_with_fallback(keyword, IMAGE_KEYWORDS, pexels_image)
         if not image_url:
             log("ERREUR: aucune image Pexels disponible")
             sys.exit(1)
@@ -256,20 +378,28 @@ def main():
         state["img_kw"]    = (kw_idx + 1) % len(IMAGE_KEYWORDS)
 
     elif slot_type == "reel":
-        reels   = captions["reel_captions"]
-        idx     = state["reel_idx"] % len(reels)
-        caption = reels[idx]
-        kw_idx  = state["reel_kw"] % len(REEL_KEYWORDS)
-        keyword = REEL_KEYWORDS[kw_idx]
+        reels      = captions["reel_captions"]
+        idx        = state["reel_idx"] % len(reels)
+        caption    = reels[idx]
+        kw_idx     = state["reel_kw"] % len(REEL_KEYWORDS)
+        keyword    = REEL_KEYWORDS[kw_idx]
+        music_idx  = state.get("music_idx", 0)
 
         log(f"Recherche video Pexels: {keyword}")
-        video_url = pexels_with_fallback(keyword, REEL_KEYWORDS, pexels_video)
-        if not video_url:
+        raw_video_url = get_with_fallback(keyword, REEL_KEYWORDS, pexels_video_url)
+        if not raw_video_url:
             log("ERREUR: aucune video Pexels disponible")
             sys.exit(1)
-        log(f"Video: {video_url[:80]}...")
+        log(f"Video Pexels: {raw_video_url[:80]}...")
 
-        sc, resp = ig_create_reel(video_url, caption)
+        # Build reel with background music
+        log("Preparation reel (video + musique)...")
+        hosted_url = build_reel_url(raw_video_url, music_idx)
+        if not hosted_url:
+            log("ERREUR: echec preparation reel")
+            sys.exit(1)
+
+        sc, resp = ig_create_reel(hosted_url, caption)
         if sc not in (200, 201) or "id" not in resp:
             log(f"ERREUR container reel: {sc} {resp}")
             sys.exit(1)
@@ -287,8 +417,9 @@ def main():
         media_id = resp2["id"]
         log(f"OK reel publie: {media_id}")
 
-        state["reel_idx"] = (idx + 1) % len(reels)
-        state["reel_kw"]  = (kw_idx + 1) % len(REEL_KEYWORDS)
+        state["reel_idx"]  = (idx + 1) % len(reels)
+        state["reel_kw"]   = (kw_idx + 1) % len(REEL_KEYWORDS)
+        state["music_idx"] = (music_idx + 1) % len(MUSIC_URLS)
 
     state["published"].append({
         "slot":     slot_key,
