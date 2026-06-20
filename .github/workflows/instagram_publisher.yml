@@ -14,6 +14,11 @@ on:
     # 19h Tunisia = 18h UTC
     - cron: '0 18 * * *'
   workflow_dispatch:
+    inputs:
+      force_slot:
+        description: 'Forcer un slot manque (ex: 2026-06-20_07h:image)'
+        required: false
+        default: ''
 
 jobs:
   publish:
@@ -40,6 +45,7 @@ jobs:
           INSTAGRAM_USER_ID: ${{ secrets.INSTAGRAM_USER_ID }}
           LONG_LIVED_TOKEN: ${{ secrets.LONG_LIVED_TOKEN }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
+          FORCE_SLOT: ${{ github.event.inputs.force_slot }}
         run: python publisher.py
 
       - name: Commit state
