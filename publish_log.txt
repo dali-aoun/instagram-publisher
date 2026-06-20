@@ -13,3 +13,9 @@
 [2026-06-19 19:58 UTC] Pas de slot pour UTC 19h58 - skip
 [2026-06-20 19:48 UTC] Pas de slot pour UTC 19h48 - skip
 [2026-06-20 22:43 UTC] Pas de slot pour UTC 22h43 - skip
+[2026-06-20 23:13 UTC] === FORCE_SLOT 2026-06-20_07h type=image ===
+[2026-06-20 23:13 UTC] Recherche image Pexels: smoothie healthy woman portrait
+[2026-06-20 23:13 UTC] Image: https://images.pexels.com/photos/6707375/pexels-photo-6707375.jpeg?auto=compress...
+[2026-06-20 23:13 UTC] Container: 18089083514570860 - attente 20s...
+[2026-06-20 23:14 UTC] OK image publiee: 17942137983253498
+[2026-06-20 23:14 UTC] === Termine 2026-06-20_07h -> 17942137983253498 ===
