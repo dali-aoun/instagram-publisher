@@ -28,7 +28,7 @@ def detect_slot(now_utc):
     best_type, best_hour, best_diff = None, None, 999
     for sched_hour, slot_type in SCHEDULE.items():
         diff = abs(now_min - sched_hour * 60)
-        if diff <= 90 and diff < best_diff:
+        if diff <= 150 and diff < best_diff:
             best_type, best_hour, best_diff = slot_type, sched_hour, diff
     return best_type, best_hour
 
