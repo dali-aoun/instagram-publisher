@@ -141,9 +141,40 @@ def merge_video_audio(video_path, audio_path, output_path):
         return False
 
 
-def upload_to_catbox(file_path):
-    """Upload file to catbox.moe (free permanent hosting) -> returns public URL."""
-    log("  Upload vers catbox.moe...")
+def upload_to_host(file_path):
+    """Upload video to a public host. Tries multiple services as fallback."""
+    hosters = [
+        ("0x0.st", _upload_0x0),
+        ("catbox.moe", _upload_catbox),
+        ("tmpfiles.org", _upload_tmpfiles),
+    ]
+    for name, fn in hosters:
+        log(f"  Upload vers {name}...")
+        url = fn(file_path)
+        if url:
+            log(f"  URL publique: {url}")
+            return url
+        log(f"  {name} echec, essai suivant...")
+    return None
+
+
+def _upload_0x0(file_path):
+    try:
+        with open(file_path, "rb") as f:
+            r = requests.post(
+                "https://0x0.st",
+                files={"file": ("reel.mp4", f, "video/mp4")},
+                timeout=300
+            )
+        if r.status_code == 200 and r.text.strip().startswith("http"):
+            return r.text.strip()
+        log(f"  0x0.st: {r.status_code} {r.text[:100]}")
+    except Exception as e:
+        log(f"  0x0.st exception: {e}")
+    return None
+
+
+def _upload_catbox(file_path):
     try:
         with open(file_path, "rb") as f:
             r = requests.post(
@@ -153,12 +184,29 @@ def upload_to_catbox(file_path):
                 timeout=300
             )
         if r.status_code == 200 and r.text.strip().startswith("https://"):
-            url = r.text.strip()
-            log(f"  catbox URL: {url}")
-            return url
-        log(f"  catbox erreur: {r.status_code} {r.text[:100]}")
+            return r.text.strip()
+        log(f"  catbox: {r.status_code} {r.text[:100]}")
     except Exception as e:
         log(f"  catbox exception: {e}")
+    return None
+
+
+def _upload_tmpfiles(file_path):
+    try:
+        with open(file_path, "rb") as f:
+            r = requests.post(
+                "https://tmpfiles.org/api/v1/upload",
+                files={"file": ("reel.mp4", f, "video/mp4")},
+                timeout=300
+            )
+        if r.status_code == 200:
+            data = r.json()
+            url = data.get("data", {}).get("url", "")
+            if url:
+                return url.replace("tmpfiles.org/", "tmpfiles.org/dl/")
+        log(f"  tmpfiles: {r.status_code} {r.text[:100]}")
+    except Exception as e:
+        log(f"  tmpfiles exception: {e}")
     return None
 
 
@@ -247,7 +295,7 @@ def build_reel_url(pexels_video_url_str, music_idx):
         if not merge_video_audio(video_path, audio_path, output_path):
             return None
 
-        return upload_to_catbox(output_path)
+        return upload_to_host(output_path)
 
 
 def ig_create_image(image_url, caption):
