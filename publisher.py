@@ -19,18 +19,11 @@ CAPS_FILE   = os.path.join(BASE_DIR, "captions.json")
 
 TZ_TUNIS = timezone(timedelta(hours=1))
 
-# UTC hour -> slot type  (Tunisia = UTC+1)
-SCHEDULE = {6: "image", 9: "reel", 12: "image", 15: "reel", 18: "image"}
-
-def detect_slot(now_utc):
-    """Trouve le slot planifié le plus proche (tolérance ±90 min pour décalages GitHub)."""
-    now_min = now_utc.hour * 60 + now_utc.minute
-    best_type, best_hour, best_diff = None, None, 999
-    for sched_hour, slot_type in SCHEDULE.items():
-        diff = abs(now_min - sched_hour * 60)
-        if diff <= 150 and diff < best_diff:
-            best_type, best_hour, best_diff = slot_type, sched_hour, diff
-    return best_type, best_hour
+# Slots du jour en ordre : (heure Tunisia, type)
+SLOTS_ORDER = [
+    ("07h", "image"), ("10h", "reel"), ("13h", "image"),
+    ("16h", "reel"),  ("19h", "image"),
+]
 
 IMAGE_KEYWORDS = [
     "smoothie healthy woman portrait",
@@ -363,18 +356,19 @@ def main():
         slot_type = parts[1]   # ex: image ou reel
         log(f"=== FORCE_SLOT {slot_key} type={slot_type} ===")
     else:
-        slot_type, sched_utc_hour = detect_slot(now_utc)
-        if not slot_type:
-            log(f"Pas de slot pour UTC {now_utc.hour}h{now_utc.minute:02d} - skip")
+        state_tmp = load_state()
+        slot_date = now_tunis.strftime("%Y-%m-%d")
+        published_today = {p["slot"] for p in state_tmp["published"] if p["slot"].startswith(slot_date)}
+        slot_key, slot_type = None, None
+        for hour_label, stype in SLOTS_ORDER:
+            key = f"{slot_date}_{hour_label}"
+            if key not in published_today:
+                slot_key, slot_type = key, stype
+                break
+        if not slot_key:
+            log(f"Les 5 slots de {slot_date} sont deja publies - skip")
             sys.exit(0)
-        tunis_hour = sched_utc_hour + 1
-        slot_date  = now_tunis.strftime("%Y-%m-%d")
-        if tunis_hour >= 24:
-            tunis_hour -= 24
-            from datetime import timedelta as _td
-            slot_date = (now_tunis.date() + _td(days=1)).isoformat()
-        slot_key = f"{slot_date}_{tunis_hour:02d}h"
-        log(f"UTC {now_utc.hour}h{now_utc.minute:02d} -> slot {slot_key} (decalage {abs(now_utc.hour*60+now_utc.minute - sched_utc_hour*60)}min)")
+        log(f"UTC {now_utc.hour}h{now_utc.minute:02d} -> prochain slot: {slot_key} type={slot_type}")
         log(f"=== Instagram Publisher {slot_key} type={slot_type} ===")
 
     state    = load_state()
