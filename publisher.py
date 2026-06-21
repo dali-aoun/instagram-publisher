@@ -56,19 +56,9 @@ REEL_KEYWORDS = [
     "healthy drink preparation",
 ]
 
-# Royalty-free background music (CC-BY bensound.com + freepd.com)
-MUSIC_URLS = [
-    "https://www.bensound.com/bensound-music/bensound-ukulele.mp3",
-    "https://www.bensound.com/bensound-music/bensound-sunny.mp3",
-    "https://www.bensound.com/bensound-music/bensound-acoustic.mp3",
-    "https://www.bensound.com/bensound-music/bensound-instafood.mp3",
-    "https://www.bensound.com/bensound-music/bensound-creativeminds.mp3",
-    "https://www.bensound.com/bensound-music/bensound-betterdays.mp3",
-    "https://www.bensound.com/bensound-music/bensound-energy.mp3",
-    "https://www.bensound.com/bensound-music/bensound-evolution.mp3",
-    "https://freepd.com/music/Smooth%20Lovin.mp3",
-    "https://freepd.com/music/Namaste.mp3",
-]
+# Local royalty-free background music (Pixabay License - free commercial use)
+MUSIC_DIR = os.path.join(BASE_DIR, "music")
+MUSIC_FILES = ["track_01.mp3", "track_02.mp3", "track_03.mp3"]
 
 
 def log(msg):
@@ -238,45 +228,25 @@ def get_with_fallback(keyword, all_keywords, fetch_fn):
 
 
 def build_reel_url(pexels_video_url_str, music_idx):
-    """Download Pexels video + background music, merge, upload to catbox."""
+    """Download Pexels video + local background music, merge, upload to catbox."""
     with tempfile.TemporaryDirectory() as tmpdir:
         video_path  = os.path.join(tmpdir, "video.mp4")
-        audio_path  = os.path.join(tmpdir, "audio.mp3")
         output_path = os.path.join(tmpdir, "reel.mp4")
 
-        # Download video
         log("  Download video Pexels...")
         if not download_file(pexels_video_url_str, video_path, "video"):
             return None
 
-        # Try music URLs in rotation until one works
-        music_downloaded = False
-        idx = music_idx % len(MUSIC_URLS)
-        for attempt in range(len(MUSIC_URLS)):
-            music_url = MUSIC_URLS[(idx + attempt) % len(MUSIC_URLS)]
-            log(f"  Download musique: {music_url.split('/')[-1]}")
-            if download_file(music_url, audio_path, "music"):
-                music_downloaded = True
-                break
+        audio_path = os.path.join(MUSIC_DIR, MUSIC_FILES[music_idx % len(MUSIC_FILES)])
+        log(f"  Musique locale: {MUSIC_FILES[music_idx % len(MUSIC_FILES)]}")
 
-        if not music_downloaded:
-            # Fallback: generate silent audio (better than no upload)
-            log("  Fallback: audio sine wave via ffmpeg")
-            cmd = ["ffmpeg", "-y", "-f", "lavfi",
-                   "-i", "sine=frequency=300:duration=60",
-                   audio_path]
-            subprocess.run(cmd, capture_output=True, timeout=30)
-            music_downloaded = os.path.exists(audio_path)
-
-        if not music_downloaded:
-            log("  ERREUR: impossible d'obtenir une piste audio")
+        if not os.path.exists(audio_path):
+            log(f"  ERREUR: fichier musique introuvable: {audio_path}")
             return None
 
-        # Merge video + audio
         if not merge_video_audio(video_path, audio_path, output_path):
             return None
 
-        # Upload merged video
         return upload_to_catbox(output_path)
 
 
@@ -442,7 +412,7 @@ def main():
 
         state["reel_idx"]  = (idx + 1) % len(reels)
         state["reel_kw"]   = (kw_idx + 1) % len(REEL_KEYWORDS)
-        state["music_idx"] = (music_idx + 1) % len(MUSIC_URLS)
+        state["music_idx"] = (music_idx + 1) % len(MUSIC_FILES)
 
     state["published"].append({
         "slot":     slot_key,
