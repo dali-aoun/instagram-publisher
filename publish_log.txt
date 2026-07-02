@@ -813,3 +813,10 @@
 [2026-07-01 20:05 UTC] Container: 18090585215570860 - attente 20s...
 [2026-07-01 20:05 UTC] OK image publiee: 18135521764574702
 [2026-07-01 20:05 UTC] === Termine 2026-07-01_19h -> 18135521764574702 ===
+[2026-07-02 09:20 UTC] UTC 9h20 -> prochain slot: 2026-07-02_07h type=image
+[2026-07-02 09:20 UTC] === Instagram Publisher 2026-07-02_07h type=image ===
+[2026-07-02 09:20 UTC] Recherche image Pexels: green smoothie fresh fruit
+[2026-07-02 09:20 UTC] Image: https://images.pexels.com/photos/5912010/pexels-photo-5912010.jpeg?auto=compress...
+[2026-07-02 09:20 UTC] Container: 18090648089570860 - attente 20s...
+[2026-07-02 09:20 UTC] OK image publiee: 18049517027788501
+[2026-07-02 09:20 UTC] === Termine 2026-07-02_07h -> 18049517027788501 ===
