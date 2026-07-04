@@ -951,3 +951,10 @@
 [2026-07-03 19:40 UTC] Container: 18090845585570860 - attente 20s...
 [2026-07-03 19:41 UTC] OK image publiee: 17975238705111086
 [2026-07-03 19:41 UTC] === Termine 2026-07-03_19h -> 17975238705111086 ===
+[2026-07-04 08:43 UTC] UTC 8h43 -> prochain slot: 2026-07-04_07h type=image
+[2026-07-04 08:43 UTC] === Instagram Publisher 2026-07-04_07h type=image ===
+[2026-07-04 08:43 UTC] Recherche image Pexels: weight loss women fitness
+[2026-07-04 08:43 UTC] Image: https://images.pexels.com/photos/6551435/pexels-photo-6551435.jpeg?auto=compress...
+[2026-07-04 08:43 UTC] Container: 18090906467570860 - attente 20s...
+[2026-07-04 08:43 UTC] OK image publiee: 18117142876883620
+[2026-07-04 08:43 UTC] === Termine 2026-07-04_07h -> 18117142876883620 ===
