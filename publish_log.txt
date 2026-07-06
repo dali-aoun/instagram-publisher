@@ -1085,3 +1085,10 @@
 [2026-07-05 19:36 UTC] Container: 18091116581570860 - attente 20s...
 [2026-07-05 19:36 UTC] OK image publiee: 17910980733243512
 [2026-07-05 19:36 UTC] === Termine 2026-07-05_19h -> 17910980733243512 ===
+[2026-07-06 10:46 UTC] UTC 10h46 -> prochain slot: 2026-07-06_07h type=image
+[2026-07-06 10:46 UTC] === Instagram Publisher 2026-07-06_07h type=image ===
+[2026-07-06 10:46 UTC] Recherche image Pexels: flat belly healthy lifestyle
+[2026-07-06 10:46 UTC] Image: https://images.pexels.com/photos/7991928/pexels-photo-7991928.jpeg?auto=compress...
+[2026-07-06 10:46 UTC] Container: 18091195382570860 - attente 20s...
+[2026-07-06 10:46 UTC] OK image publiee: 17917870980275577
+[2026-07-06 10:46 UTC] === Termine 2026-07-06_07h -> 17917870980275577 ===
