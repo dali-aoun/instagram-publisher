@@ -137,6 +137,7 @@ def merge_video_audio(video_path, audio_path, output_path):
 def upload_to_host(file_path):
     """Upload video to a public host. Tries multiple services as fallback."""
     hosters = [
+        ("litterbox.catbox.moe", _upload_litterbox),
         ("0x0.st", _upload_0x0),
         ("catbox.moe", _upload_catbox),
         ("tmpfiles.org", _upload_tmpfiles),
@@ -148,6 +149,23 @@ def upload_to_host(file_path):
             log(f"  URL publique: {url}")
             return url
         log(f"  {name} echec, essai suivant...")
+    return None
+
+
+def _upload_litterbox(file_path):
+    try:
+        with open(file_path, "rb") as f:
+            r = requests.post(
+                "https://litterbox.catbox.moe/resources/internals/api.php",
+                data={"reqtype": "fileupload", "time": "72h"},
+                files={"fileToUpload": ("reel.mp4", f, "video/mp4")},
+                timeout=300
+            )
+        if r.status_code == 200 and r.text.strip().startswith("https://"):
+            return r.text.strip()
+        log(f"  litterbox: {r.status_code} {r.text[:100]}")
+    except Exception as e:
+        log(f"  litterbox exception: {e}")
     return None
 
 
