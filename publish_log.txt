@@ -1192,3 +1192,10 @@
 [2026-07-09 12:13 UTC]   Container pret (60s)
 [2026-07-09 12:13 UTC] OK reel publie: 17925541530380187
 [2026-07-09 12:13 UTC] === Termine 2026-07-09_10h -> 17925541530380187 ===
+[2026-08-28 10:54 UTC] UTC 10h54 -> prochain slot: 2026-08-28_07h type=image
+[2026-08-28 10:54 UTC] === Instagram Publisher 2026-08-28_07h type=image ===
+[2026-08-28 10:54 UTC] Recherche image Pexels: women wellness morning routine
+[2026-08-28 10:54 UTC] Image: https://images.pexels.com/photos/29881469/pexels-photo-29881469.jpeg?auto=compre...
+[2026-08-28 10:54 UTC] Container: 18098698025570860 - attente 20s...
+[2026-08-28 10:55 UTC] OK image publiee: 18119004430929506
+[2026-08-28 10:55 UTC] === Termine 2026-08-28_07h -> 18119004430929506 ===
