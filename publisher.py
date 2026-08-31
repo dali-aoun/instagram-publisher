@@ -134,9 +134,45 @@ def merge_video_audio(video_path, audio_path, output_path):
         return False
 
 
+def _upload_github_release(file_path):
+    """Upload via GitHub Release asset — CDN stable, Instagram accepte."""
+    import time
+    token = os.environ.get("GITHUB_TOKEN", "")
+    repo = os.environ.get("GITHUB_REPO", "")
+    if not token or not repo:
+        return None
+    tag = f"reel-{int(time.time())}"
+    headers_gh = {
+        "Authorization": f"Bearer {token}",
+        "Accept": "application/vnd.github+json",
+        "X-GitHub-Api-Version": "2022-11-28",
+    }
+    r = requests.post(
+        f"https://api.github.com/repos/{repo}/releases",
+        json={"tag_name": tag, "name": tag, "draft": False, "prerelease": True},
+        headers=headers_gh, timeout=30
+    )
+    if r.status_code not in (200, 201):
+        log(f"  github_release create: {r.status_code} {r.text[:100]}")
+        return None
+    release = r.json()
+    upload_url = release["upload_url"].replace("{?name,label}", "")
+    with open(file_path, "rb") as fv:
+        ru = requests.post(
+            f"{upload_url}?name=reel.mp4",
+            headers={**headers_gh, "Content-Type": "video/mp4"},
+            data=fv, timeout=300
+        )
+    if ru.status_code not in (200, 201):
+        log(f"  github_release upload: {ru.status_code} {ru.text[:100]}")
+        return None
+    return ru.json().get("browser_download_url")
+
+
 def upload_to_host(file_path):
     """Upload video to a public host. Tries multiple services as fallback."""
     hosters = [
+        ("github_release", _upload_github_release),
         ("litterbox.catbox.moe", _upload_litterbox),
         ("0x0.st", _upload_0x0),
         ("catbox.moe", _upload_catbox),
