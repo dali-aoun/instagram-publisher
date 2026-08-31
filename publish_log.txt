@@ -1271,3 +1271,4 @@
 [2026-08-31 20:42 UTC] Container: 18099194975570860 - attente 20s...
 [2026-08-31 20:42 UTC] OK image publiee: 17998181702805959
 [2026-08-31 20:42 UTC] === Termine 2026-08-31_19h -> 17998181702805959 ===
+[2026-08-31 22:43 UTC] Les 5 slots de 2026-08-31 sont deja publies - skip
