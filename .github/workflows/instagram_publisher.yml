@@ -46,6 +46,8 @@ jobs:
           LONG_LIVED_TOKEN: ${{ secrets.LONG_LIVED_TOKEN }}
           PEXELS_API_KEY: ${{ secrets.PEXELS_API_KEY }}
           FORCE_SLOT: ${{ github.event.inputs.force_slot }}
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPO: ${{ github.repository }}
         run: python publisher.py
 
       - name: Commit state
