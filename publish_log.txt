@@ -1272,3 +1272,10 @@
 [2026-08-31 20:42 UTC] OK image publiee: 17998181702805959
 [2026-08-31 20:42 UTC] === Termine 2026-08-31_19h -> 17998181702805959 ===
 [2026-08-31 22:43 UTC] Les 5 slots de 2026-08-31 sont deja publies - skip
+[2026-09-01 11:23 UTC] UTC 11h23 -> prochain slot: 2026-09-01_07h type=image
+[2026-09-01 11:23 UTC] === Instagram Publisher 2026-09-01_07h type=image ===
+[2026-09-01 11:23 UTC] Recherche image Pexels: women fitness over 40
+[2026-09-01 11:23 UTC] Image: https://images.pexels.com/photos/6539841/pexels-photo-6539841.jpeg?auto=compress...
+[2026-09-01 11:23 UTC] Container: 18099259817570860 - attente 20s...
+[2026-09-01 11:23 UTC] OK image publiee: 18073367177422687
+[2026-09-01 11:23 UTC] === Termine 2026-09-01_07h -> 18073367177422687 ===
