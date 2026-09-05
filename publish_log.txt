@@ -1390,3 +1390,10 @@
 [2026-09-04 20:40 UTC] Container: 18099702542570860 - attente 20s...
 [2026-09-04 20:40 UTC] OK image publiee: 17957360541230380
 [2026-09-04 20:40 UTC] === Termine 2026-09-04_19h -> 17957360541230380 ===
+[2026-09-05 10:16 UTC] UTC 10h16 -> prochain slot: 2026-09-05_07h type=image
+[2026-09-05 10:16 UTC] === Instagram Publisher 2026-09-05_07h type=image ===
+[2026-09-05 10:16 UTC] Recherche image Pexels: women yoga wellness
+[2026-09-05 10:16 UTC] Image: https://images.pexels.com/photos/8374565/pexels-photo-8374565.jpeg?auto=compress...
+[2026-09-05 10:16 UTC] Container: 18099770120570860 - attente 20s...
+[2026-09-05 10:16 UTC] OK image publiee: 17955485436229923
+[2026-09-05 10:16 UTC] === Termine 2026-09-05_07h -> 17955485436229923 ===
