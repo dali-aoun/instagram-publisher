@@ -1879,3 +1879,10 @@
 [2026-09-13 20:38 UTC] Container: 18100930982570860 - attente 20s...
 [2026-09-13 20:38 UTC] OK image publiee: 18120938224711336
 [2026-09-13 20:38 UTC] === Termine 2026-09-13_19h -> 18120938224711336 ===
+[2026-09-14 12:17 UTC] UTC 12h17 -> prochain slot: 2026-09-14_07h type=image
+[2026-09-14 12:17 UTC] === Instagram Publisher 2026-09-14_07h type=image ===
+[2026-09-14 12:17 UTC] Recherche image Pexels: healthy green smoothie
+[2026-09-14 12:17 UTC] Image: https://images.pexels.com/photos/28909422/pexels-photo-28909422.jpeg?auto=compre...
+[2026-09-14 12:17 UTC] Container: 18101010713570860 - attente 20s...
+[2026-09-14 12:17 UTC] OK image publiee: 18335432770259065
+[2026-09-14 12:17 UTC] === Termine 2026-09-14_07h -> 18335432770259065 ===
