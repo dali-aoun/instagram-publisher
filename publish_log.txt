@@ -1991,3 +1991,10 @@
 [2026-09-15 21:11 UTC]   Container pret (80s)
 [2026-09-15 21:11 UTC] OK reel publie: 18432733705178514
 [2026-09-15 21:11 UTC] === Termine 2026-09-15_16h -> 18432733705178514 ===
+[2026-09-16 11:10 UTC] UTC 11h10 -> prochain slot: 2026-09-16_07h type=image
+[2026-09-16 11:10 UTC] === Instagram Publisher 2026-09-16_07h type=image ===
+[2026-09-16 11:10 UTC] Recherche image Pexels: flat belly healthy lifestyle
+[2026-09-16 11:10 UTC] Image: https://images.pexels.com/photos/5714275/pexels-photo-5714275.jpeg?auto=compress...
+[2026-09-16 11:10 UTC] Container: 18101265359570860 - attente 20s...
+[2026-09-16 11:11 UTC] OK image publiee: 17902206768578951
+[2026-09-16 11:11 UTC] === Termine 2026-09-16_07h -> 17902206768578951 ===
