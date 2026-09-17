@@ -2048,3 +2048,10 @@
 [2026-09-16 21:11 UTC] Container: 18101327405570860 - attente 20s...
 [2026-09-16 21:11 UTC] OK image publiee: 18166228552467723
 [2026-09-16 21:11 UTC] === Termine 2026-09-16_19h -> 18166228552467723 ===
+[2026-09-17 11:19 UTC] UTC 11h19 -> prochain slot: 2026-09-17_07h type=image
+[2026-09-17 11:19 UTC] === Instagram Publisher 2026-09-17_07h type=image ===
+[2026-09-17 11:19 UTC] Recherche image Pexels: smoothie healthy woman portrait
+[2026-09-17 11:19 UTC] Image: https://images.pexels.com/photos/6740776/pexels-photo-6740776.jpeg?auto=compress...
+[2026-09-17 11:19 UTC] Container: 18101389994570860 - attente 20s...
+[2026-09-17 11:19 UTC] OK image publiee: 17985039135115038
+[2026-09-17 11:19 UTC] === Termine 2026-09-17_07h -> 17985039135115038 ===
