@@ -2500,3 +2500,10 @@
 [2026-09-24 21:24 UTC] Container: 18102388319570860 - attente 20s...
 [2026-09-24 21:25 UTC] OK image publiee: 17995082436032087
 [2026-09-24 21:25 UTC] === Termine 2026-09-24_19h -> 17995082436032087 ===
+[2026-09-25 11:30 UTC] UTC 11h30 -> prochain slot: 2026-09-25_07h type=image
+[2026-09-25 11:30 UTC] === Instagram Publisher 2026-09-25_07h type=image ===
+[2026-09-25 11:30 UTC] Recherche image Pexels: healthy food women over 40
+[2026-09-25 11:30 UTC] Image: https://images.pexels.com/photos/9050101/pexels-photo-9050101.jpeg?auto=compress...
+[2026-09-25 11:30 UTC] Container: 18102464120570860 - attente 20s...
+[2026-09-25 11:30 UTC] OK image publiee: 18074929625440604
+[2026-09-25 11:30 UTC] === Termine 2026-09-25_07h -> 18074929625440604 ===
