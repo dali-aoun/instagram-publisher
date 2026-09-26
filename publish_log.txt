@@ -2583,3 +2583,10 @@
 [2026-09-26 13:42 UTC]   Container pret (20s)
 [2026-09-26 13:42 UTC] OK reel publie: 18113702735090389
 [2026-09-26 13:42 UTC] === Termine 2026-09-26_10h -> 18113702735090389 ===
+[2026-09-26 15:20 UTC] UTC 15h20 -> prochain slot: 2026-09-26_13h type=image
+[2026-09-26 15:20 UTC] === Instagram Publisher 2026-09-26_13h type=image ===
+[2026-09-26 15:20 UTC] Recherche image Pexels: healthy morning breakfast
+[2026-09-26 15:20 UTC] Image: https://images.pexels.com/photos/7413498/pexels-photo-7413498.jpeg?auto=compress...
+[2026-09-26 15:21 UTC] Container: 18102629591570860 - attente 20s...
+[2026-09-26 15:21 UTC] OK image publiee: 18133951711659534
+[2026-09-26 15:21 UTC] === Termine 2026-09-26_13h -> 18133951711659534 ===
