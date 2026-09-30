@@ -2774,3 +2774,10 @@
 [2026-09-29 19:51 UTC] OK image publiee: 18476575339116964
 [2026-09-29 19:51 UTC] === Termine 2026-09-29_19h -> 18476575339116964 ===
 [2026-09-29 22:08 UTC] Les 5 slots de 2026-09-29 sont deja publies - skip
+[2026-09-30 12:12 UTC] UTC 12h12 -> prochain slot: 2026-09-30_07h type=image
+[2026-09-30 12:12 UTC] === Instagram Publisher 2026-09-30_07h type=image ===
+[2026-09-30 12:12 UTC] Recherche image Pexels: healthy morning breakfast
+[2026-09-30 12:12 UTC] Image: https://images.pexels.com/photos/7413498/pexels-photo-7413498.jpeg?auto=compress...
+[2026-09-30 12:12 UTC] Container: 18103155875570860 - attente 20s...
+[2026-09-30 12:13 UTC] OK image publiee: 18078237992451033
+[2026-09-30 12:13 UTC] === Termine 2026-09-30_07h -> 18078237992451033 ===
