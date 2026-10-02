@@ -2937,3 +2937,10 @@
 [2026-10-02 19:49 UTC]   Container pret (50s)
 [2026-10-02 19:49 UTC] OK reel publie: 18113119205021398
 [2026-10-02 19:49 UTC] === Termine 2026-10-02_16h -> 18113119205021398 ===
+[2026-10-02 22:04 UTC] UTC 22h04 -> prochain slot: 2026-10-02_19h type=image
+[2026-10-02 22:04 UTC] === Instagram Publisher 2026-10-02_19h type=image ===
+[2026-10-02 22:04 UTC] Recherche image Pexels: women yoga wellness
+[2026-10-02 22:04 UTC] Image: https://images.pexels.com/photos/35630584/pexels-photo-35630584.jpeg?auto=compre...
+[2026-10-02 22:04 UTC] Container: 18103488998570860 - attente 20s...
+[2026-10-02 22:04 UTC] OK image publiee: 18118416349748838
+[2026-10-02 22:04 UTC] === Termine 2026-10-02_19h -> 18118416349748838 ===
