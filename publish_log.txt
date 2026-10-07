@@ -3215,3 +3215,10 @@
 [2026-10-07 20:34 UTC]   Container pret (50s)
 [2026-10-07 20:34 UTC] OK reel publie: 18377542258210968
 [2026-10-07 20:34 UTC] === Termine 2026-10-07_16h -> 18377542258210968 ===
+[2026-10-07 23:03 UTC] UTC 23h03 -> prochain slot: 2026-10-08_07h type=image
+[2026-10-07 23:03 UTC] === Instagram Publisher 2026-10-08_07h type=image ===
+[2026-10-07 23:03 UTC] Recherche image Pexels: smoothie healthy woman portrait
+[2026-10-07 23:03 UTC] Image: https://images.pexels.com/photos/7208602/pexels-photo-7208602.jpeg?auto=compress...
+[2026-10-07 23:03 UTC] Container: 18104128037570860 - attente 20s...
+[2026-10-07 23:04 UTC] OK image publiee: 18127466060491152
+[2026-10-07 23:04 UTC] === Termine 2026-10-08_07h -> 18127466060491152 ===
