@@ -3537,3 +3537,4 @@
 [2026-10-13 20:32 UTC] Container: 18104935715570860 - attente 20s...
 [2026-10-13 20:33 UTC] OK image publiee: 18154549651458653
 [2026-10-13 20:33 UTC] === Termine 2026-10-13_19h -> 18154549651458653 ===
+[2026-10-13 22:33 UTC] Les 5 slots de 2026-10-13 sont deja publies - skip
