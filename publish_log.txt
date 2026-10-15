@@ -3618,3 +3618,10 @@
 [2026-10-15 14:05 UTC]   Container pret (50s)
 [2026-10-15 14:05 UTC] OK reel publie: 18382954261238228
 [2026-10-15 14:05 UTC] === Termine 2026-10-15_10h -> 18382954261238228 ===
+[2026-10-15 15:56 UTC] UTC 15h56 -> prochain slot: 2026-10-15_13h type=image
+[2026-10-15 15:56 UTC] === Instagram Publisher 2026-10-15_13h type=image ===
+[2026-10-15 15:56 UTC] Recherche image Pexels: weight loss women fitness
+[2026-10-15 15:56 UTC] Image: https://images.pexels.com/photos/7991914/pexels-photo-7991914.jpeg?auto=compress...
+[2026-10-15 15:56 UTC] Container: 18105179606570860 - attente 20s...
+[2026-10-15 15:57 UTC] OK image publiee: 18118545569073405
+[2026-10-15 15:57 UTC] === Termine 2026-10-15_13h -> 18118545569073405 ===
