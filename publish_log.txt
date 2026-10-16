@@ -3672,3 +3672,10 @@
 [2026-10-16 13:53 UTC]   Container pret (30s)
 [2026-10-16 13:53 UTC] OK reel publie: 18124649341906903
 [2026-10-16 13:53 UTC] === Termine 2026-10-16_10h -> 18124649341906903 ===
+[2026-10-16 15:45 UTC] UTC 15h45 -> prochain slot: 2026-10-16_13h type=image
+[2026-10-16 15:45 UTC] === Instagram Publisher 2026-10-16_13h type=image ===
+[2026-10-16 15:45 UTC] Recherche image Pexels: healthy food women over 40
+[2026-10-16 15:45 UTC] Image: https://images.pexels.com/photos/6163281/pexels-photo-6163281.jpeg?auto=compress...
+[2026-10-16 15:45 UTC] Container: 18105319226570860 - attente 20s...
+[2026-10-16 15:45 UTC] OK image publiee: 18118439164966988
+[2026-10-16 15:45 UTC] === Termine 2026-10-16_13h -> 18118439164966988 ===
