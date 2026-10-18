@@ -3760,3 +3760,10 @@
 [2026-10-17 20:26 UTC] Container: 18105499088570860 - attente 20s...
 [2026-10-17 20:26 UTC] OK image publiee: 18158212609542436
 [2026-10-17 20:26 UTC] === Termine 2026-10-17_19h -> 18158212609542436 ===
+[2026-10-18 10:40 UTC] UTC 10h40 -> prochain slot: 2026-10-18_07h type=image
+[2026-10-18 10:40 UTC] === Instagram Publisher 2026-10-18_07h type=image ===
+[2026-10-18 10:40 UTC] Recherche image Pexels: women fitness over 40
+[2026-10-18 10:40 UTC] Image: https://images.pexels.com/photos/6539844/pexels-photo-6539844.jpeg?auto=compress...
+[2026-10-18 10:40 UTC] Container: 18105573326570860 - attente 20s...
+[2026-10-18 10:40 UTC] OK image publiee: 18097103369110721
+[2026-10-18 10:40 UTC] === Termine 2026-10-18_07h -> 18097103369110721 ===
